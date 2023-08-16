@@ -323,11 +323,13 @@ resource "aws_ecs_task_definition" "task" {
         name      = key
         valueFrom = value
       }]
+      mountPoints = []
       portMappings = [container.port == null ? null : {
         containerPort = tonumber(container.port)
         hostPort      = tonumber(container.port)
         protocol      = container.network_protocol
       }]
+      volumesFrom = []
       logConfiguration = {
         logDriver = "awslogs"
         options = {
