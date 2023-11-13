@@ -347,6 +347,21 @@ resource "aws_ecs_task_definition" "task" {
     }, container.extra_options)
   ])
 
+
+  dynamic "volume" {
+    for_each = [
+      for v in [var.efs_volume] : v
+      if v != null
+    ]
+
+    content {
+      name = volume.value.volume_name
+      efs_volume_configuration {
+        file_system_id = volume.value.file_system_id
+      }
+    }
+  }
+
   execution_role_arn = aws_iam_role.execution.arn
   task_role_arn      = aws_iam_role.task.arn
 
